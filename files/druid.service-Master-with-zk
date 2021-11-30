@@ -1,0 +1,10 @@
+[Unit]
+Requires=network.target remote-fs.target
+After=network.target remote-fs.target
+[Service]
+Type=simple
+User=root
+ExecStart=/opt/druid/bin/start-cluster-master-with-zk-server
+Restart=on-abnormal
+[Install]
+WantedBy=multi-user.target

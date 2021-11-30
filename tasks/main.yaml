@@ -1,0 +1,38 @@
+---
+- name: Install java
+  yum: 
+    name: java-1.8.0-openjdk
+    update_cache: yes
+    state: present
+  become: yes
+
+- name: Create druid user
+  user:
+    name: druid
+
+- name: Create druid deploy directory
+  file: 
+    path: /opt/druid 
+    state: directory 
+    mode: 0755
+    owner: druid
+  become: yes
+
+
+- name: Un-tar druid file
+  unarchive:
+    src: druid-0.22.0-bin.tar.gz
+    dest: /opt/druid/
+    extra_opts: [--strip-components=1]
+
+- name: making service file for druid
+  copy:
+    src: druid.service
+    dest: /etc/systemd/system
+    mode: '0644'
+    
+
+- name: Druid service start
+  service:
+    name: druid
+    state: started
